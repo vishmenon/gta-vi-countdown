@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#120b2d">
+<title>GTA VI — UK Launch Countdown</title>
+<style>
+  :root { color-scheme: dark; --pink:#ff4fb8; --cyan:#43e8ff; --gold:#ffd36a; }
+  * { box-sizing:border-box }
+  body {
+    margin:0; min-height:100vh; overflow-x:hidden; color:#fff;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif;
+    background:
+      radial-gradient(ellipse at 50% 22%, rgba(255,67,169,.34), transparent 38%),
+      radial-gradient(ellipse at 85% 72%, rgba(0,210,255,.22), transparent 35%),
+      linear-gradient(160deg,#09091e 0%,#21103c 48%,#071b32 100%);
+    display:grid; place-items:center; padding:28px 16px;
+  }
+  body:before {
+    content:""; position:fixed; inset:0; pointer-events:none; opacity:.18;
+    background-image:linear-gradient(rgba(255,255,255,.12) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.12) 1px,transparent 1px);
+    background-size:42px 42px; mask-image:linear-gradient(to bottom,transparent,#000 45%,#000);
+  }
+  .wrap { width:min(900px,100%); text-align:center; position:relative; }
+  .eyebrow { letter-spacing:.34em; text-transform:uppercase; color:var(--cyan); font-size:.72rem; font-weight:800; }
+  h1 { margin:14px 0 0; font-size:clamp(3.4rem,12vw,7.8rem); line-height:.82; letter-spacing:-.085em; font-weight:950; text-shadow:0 5px 0 rgba(255,79,184,.22),0 0 38px rgba(255,79,184,.35); }
+  h1 span { display:block; color:#ffb0df; -webkit-text-stroke:1px #fff; }
+  .subtitle { margin:24px 0 32px; color:#e8dff7; letter-spacing:.16em; font-weight:700; font-size:clamp(.8rem,2vw,1rem); }
+  .sunset { width:min(460px,78vw); height:125px; margin:0 auto 28px; border-radius:50% 50% 8px 8px; opacity:.9;
+    background:repeating-linear-gradient(to bottom,#ffcf73 0 8px,#ff8d9e 8px 15px,#f24eaa 15px 23px,transparent 23px 28px);
+    filter:drop-shadow(0 0 28px rgba(255,91,175,.45)); }
+  .timer { display:grid; grid-template-columns:repeat(4,1fr); gap:clamp(7px,2vw,16px); margin:0 auto; max-width:780px; }
+  .unit { padding:clamp(14px,3vw,25px) 5px; border:1px solid rgba(255,255,255,.22); border-radius:17px;
+    background:linear-gradient(145deg,rgba(255,255,255,.13),rgba(255,255,255,.035)); box-shadow:0 14px 40px rgba(0,0,0,.22), inset 0 1px rgba(255,255,255,.16); backdrop-filter:blur(12px); }
+  .number { font-variant-numeric:tabular-nums; font-size:clamp(2.1rem,8vw,5rem); font-weight:900; line-height:1; letter-spacing:-.06em; }
+  .label { margin-top:10px; color:#c9c0dc; font-size:clamp(.58rem,1.6vw,.78rem); letter-spacing:.2em; text-transform:uppercase; font-weight:800; }
+  .launch { margin:25px 0 0; color:var(--gold); font-weight:850; letter-spacing:.12em; font-size:clamp(.78rem,2vw,1rem); }
+  .note { color:#bcb4d1; font-size:.78rem; margin-top:10px; }
+  .share { margin-top:25px; border:1px solid rgba(67,232,255,.6); border-radius:999px; padding:12px 22px; color:#fff; background:rgba(67,232,255,.12); font-weight:800; cursor:pointer; }
+  .share:hover { background:rgba(67,232,255,.24) }
+  footer { margin-top:30px; color:#8f88a8; font-size:.68rem; letter-spacing:.12em; text-transform:uppercase; }
+  @media(max-width:440px){ .timer{gap:6px}.unit{border-radius:12px}.label{letter-spacing:.1em} }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="eyebrow">The wait is nearly over</div>
+  <h1>GRAND THEFT <span>AUTO VI</span></h1>
+  <div class="subtitle">VICE CITY IS CALLING</div>
+  <div class="sunset" aria-hidden="true"></div>
+  <section class="timer" aria-label="Countdown to UK launch">
+    <div class="unit"><div class="number" id="days">--</div><div class="label">Days</div></div>
+    <div class="unit"><div class="number" id="hours">--</div><div class="label">Hours</div></div>
+    <div class="unit"><div class="number" id="minutes">--</div><div class="label">Minutes</div></div>
+    <div class="unit"><div class="number" id="seconds">--</div><div class="label">Seconds</div></div>
+  </section>
+  <div class="launch">UK LAUNCH · 19 NOVEMBER 2026 · 00:00 GMT</div>
+  <div class="note" id="status">Counting down to launch…</div>
+  <button class="share" id="shareBtn">SHARE THIS COUNTDOWN</button>
+  <footer>One city. Two protagonists. No sleep.</footer>
+</main>
+<script>
+  // Midnight at the start of 19 November 2026 in the UK (GMT).
+  const launch = new Date("2026-11-19T00:00:00+00:00").getTime();
+  const ids = ["days","hours","minutes","seconds"];
+  function tick() {
+    let remaining = Math.max(0, launch - Date.now());
+    const values = [
+      Math.floor(remaining / 86400000),
+      Math.floor((remaining % 86400000) / 3600000),
+      Math.floor((remaining % 3600000) / 60000),
+      Math.floor((remaining % 60000) / 1000)
+    ];
+    ids.forEach((id,i) => document.getElementById(id).textContent = String(values[i]).padStart(2,"0"));
+    if (remaining === 0) document.getElementById("status").textContent = "IT'S TIME. WELCOME TO VICE CITY.";
+  }
+  tick(); setInterval(tick,1000);
+  document.getElementById("shareBtn").addEventListener("click", async () => {
+    const data = {title:document.title,text:"The GTA VI UK launch countdown is on!",url:location.href};
+    try {
+      if (navigator.share) await navigator.share(data);
+      else if (navigator.clipboard) { await navigator.clipboard.writeText(location.href); alert("Countdown link copied!"); }
+      else alert("Copy this page's address from your browser to share it.");
+    } catch(e) {}
+  });
+</script>
+</body>
+</html>
